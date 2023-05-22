@@ -111,78 +111,76 @@ db = int(input('\nEnter db index to select: \r\n'))
 r.execute_command('SELECT', db)
 
 # display the keys with their corresponding indexes
-keys_dict = {i: key for i, key in enumerate(keys)}
-print_in_color('\nKeys and their values:', 'light_green')
-for i, key in keys_dict.items():
-    value = r.get(key)
-    if is_text(value):
-        value = value.decode('utf-8')
-    else:
-        value = value.hex()
-    print_in_color(f"{i}: {key.decode('utf-8')}: {value}", 'light_cyan')
-
-# select a key
-key_index = int(input('\nEnter key index to select: \r\n'))
-selected_key = keys_dict[key_index]
-
-# # print keys
-# value = r.get(selected_key)
-# if is_text(value):
-#     value = value.decode('utf-8')
-# else:
-#     value = value.hex()
-# print_in_color(f"\nSelected:", 'green')
-# print_in_color(f"   {selected_key.decode('utf-8')}: {value}", 'light_cyan')
-
-# define and print possible operations
-operations = {'g': 'GET', 's': 'SET', 'd': 'DELETE', 't': 'TTL', 'y': 'TYPE', 'q': 'QUIT'}
-print_in_color('\nAvailable operations:', 'light_green')
-ops = ', '.join(f"{op}: {desc}" for op, desc in operations.items())
-print_in_color(ops, 'light_cyan')
-
-while True:
-    # prompt user to choose an operation
-    selected_op = input('\n> ').lower()
-
-    # check if entered operation is valid
-    if selected_op not in operations:
-        print_in_color('Invalid operation. Try again.', 'red')
-        continue
-
-    # check if quit
-    if selected_op == 'q':
-        break
-
-    # get operation name
-    selected_op_name = operations[selected_op]
-
-    # execute the selected operation
-    if selected_op_name == 'GET':
-        value = r.get(selected_key)
+def keys_management():
+    keys_dict = {i: key for i, key in enumerate(r.keys())}
+    print_in_color('\nKeys and their values:', 'light_green')
+    for i, key in keys_dict.items():
+        value = r.get(key)
         if is_text(value):
             value = value.decode('utf-8')
         else:
             value = value.hex()
-        print_in_color(f"Value: {value}", 'light_cyan')
+        print_in_color(f"{i}: {key.decode('utf-8')}: {value}", 'light_cyan')
 
-    elif selected_op_name == 'SET':
-        new_value = input('Enter new value for the key: \r\n')
-        r.set(selected_key, new_value)
-        print_in_color(f"Key {selected_key.decode('utf-8')} has been set to {new_value}.", 'light_cyan')
+    # select a key
+    key_index = int(input('\nEnter key index to select: \r\n'))
+    selected_key = keys_dict[key_index]
 
-    elif selected_op_name == 'DELETE':
-        r.delete(selected_key)
-        print_in_color(f"Key {selected_key.decode('utf-8')} has been deleted.", 'light_cyan')
+    # define and print possible operations
+    operations = {'g': 'GET', 's': 'SET', 'd': 'DELETE', 't': 'TTL', 'y': 'TYPE', '..': 'BACK', 'q': 'QUIT'}
+    print_in_color('\nAvailable operations:', 'light_green')
+    ops = ', '.join(f"{op}: {desc}" for op, desc in operations.items())
+    print_in_color(ops, 'light_cyan')
 
-    elif selected_op_name == 'TTL':
-        ttl = r.ttl(selected_key)
-        if ttl == -1:
-            print_in_color(f"Key {selected_key.decode('utf-8')} does not have an expire set.", 'light_cyan')
-        elif ttl == -2:
-            print_in_color(f"Key {selected_key.decode('utf-8')} does not exist.", 'light_cyan')
-        else:
-            print_in_color(f"Time to live for key {selected_key.decode('utf-8')}: {ttl} seconds.", 'light_cyan')
+    while True:
+        # prompt user to choose an operation
+        selected_op = input('\n> ').lower()
 
-    elif selected_op_name == 'TYPE':
-        key_type = r.type(selected_key)
-        print_in_color(f"Type of key {selected_key.decode('utf-8')}: {key_type}", 'light_cyan')
+        # check if entered operation is valid
+        if selected_op not in operations:
+            print_in_color('Invalid operation. Try again.', 'red')
+            continue
+
+        # check if quit
+        if selected_op == 'q':
+            break
+
+        # get operation name
+        selected_op_name = operations[selected_op]
+
+        # execute the selected operation
+        if selected_op_name == 'GET':
+            value = r.get(selected_key)
+            if is_text(value):
+                value = value.decode('utf-8')
+            else:
+                value = value.hex()
+            print_in_color(f"Value: {value}", 'light_cyan')
+
+        elif selected_op_name == 'SET':
+            new_value = input('Enter new value for the key: \r\n')
+            r.set(selected_key, new_value)
+            print_in_color(f"Key {selected_key.decode('utf-8')} has been set to {new_value}.", 'light_cyan')
+
+        elif selected_op_name == 'DELETE':
+            r.delete(selected_key)
+            print_in_color(f"Key {selected_key.decode('utf-8')} has been deleted.", 'light_cyan')
+            keys_management() # yes, it's bad
+
+        elif selected_op_name == 'TTL':
+            ttl = r.ttl(selected_key)
+            if ttl == -1:
+                print_in_color(f"Key {selected_key.decode('utf-8')} does not have an expire set.", 'light_cyan')
+            elif ttl == -2:
+                print_in_color(f"Key {selected_key.decode('utf-8')} does not exist.", 'light_cyan')
+            else:
+                print_in_color(f"Time to live for key {selected_key.decode('utf-8')}: {ttl} seconds.", 'light_cyan')
+
+        elif selected_op_name == 'BACK':
+            keys_management() # yes, it's bad
+
+        elif selected_op_name == 'TYPE':
+            key_type = r.type(selected_key)
+            print_in_color(f"Type of key {selected_key.decode('utf-8')}: {key_type}", 'light_cyan')
+
+keys_management()

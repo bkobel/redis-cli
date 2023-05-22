@@ -1,3 +1,6 @@
+# Connection strings cache
+.rediscli
+
 # Byte-compiled / optimized files
 __pycache__/
 *.py[cod]
@@ -26,6 +29,3 @@ build/
 # OS or editor-specific files
 .DS_Store
 Thumbs.db
-
-# Connection strings cache
-.rediscli

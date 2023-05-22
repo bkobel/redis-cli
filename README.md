@@ -42,3 +42,13 @@ You'll then be given options to perform various operations on the selected key:
 Credentials are stored using AES-256-CBC encryption with SHA256 key derivation.
 
 The script also supports connecting to Redis servers via TLS, which ensures that all data sent between the script and the server is encrypted.
+
+
+## ToDo
+
+1. Add support for direct connection strings for common cloud providers;
+2. Add support for storing several connections in `.rediscli`;
+3. Add possibility to switch DBs/keys on the fly;
+4. Add test coverage;
+5. Add setup.py with more automated way of running the script;
+6. Refactor;

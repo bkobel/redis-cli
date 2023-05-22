@@ -102,7 +102,9 @@ for i, db in enumerate(dbs):
     keys = r.keys()[:5]
     for key in keys:
         db_display=f"   {key.decode('utf-8')}";
-        print_in_color(db_display + "\n   ..." if len(r.keys()) > 5 else db_display, 'light_cyan')
+        print_in_color(db_display, 'light_cyan')
+    if len(r.keys()) > 5:
+        print_in_color("\n   ...")
 
 # select DB
 db = int(input('\nEnter db index to select: \r\n'))

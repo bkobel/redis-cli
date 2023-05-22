@@ -101,10 +101,10 @@ for i, db in enumerate(dbs):
     print_in_color(f"db#{db}:", 'light_green')
     keys = r.keys()[:5]
     for key in keys:
-        db_display=f"   {key.decode('utf-8')}";
+        db_display=f"{key.decode('utf-8')}";
         print_in_color(db_display, 'light_cyan')
     if len(r.keys()) > 5:
-        print_in_color("\n   ...")
+        print_in_color("...", 'light_cyan')
 
 # select DB
 db = int(input('\nEnter db index to select: \r\n'))
@@ -125,14 +125,14 @@ for i, key in keys_dict.items():
 key_index = int(input('\nEnter key index to select: \r\n'))
 selected_key = keys_dict[key_index]
 
-# print keys
-value = r.get(selected_key)
-if is_text(value):
-    value = value.decode('utf-8')
-else:
-    value = value.hex()
-print_in_color(f"\nSelected key and its value:", 'green')
-print_in_color(f"   {selected_key.decode('utf-8')}: {value}", 'light_cyan')
+# # print keys
+# value = r.get(selected_key)
+# if is_text(value):
+#     value = value.decode('utf-8')
+# else:
+#     value = value.hex()
+# print_in_color(f"\nSelected:", 'green')
+# print_in_color(f"   {selected_key.decode('utf-8')}: {value}", 'light_cyan')
 
 # define and print possible operations
 operations = {'g': 'GET', 's': 'SET', 'd': 'DELETE', 't': 'TTL', 'y': 'TYPE', 'q': 'QUIT'}
